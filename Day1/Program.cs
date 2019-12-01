@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Shared;
 
 namespace Day1
@@ -22,23 +23,15 @@ namespace Day1
 
         public static int Day1Solution(List<string> inputLines)
         {
-            var totalMass = 0;
-            foreach (var bla in inputLines)
-            {
-                totalMass += CalculateFeulForModule(int.Parse(bla));
-            }
-
+            var totalMass = inputLines.Select(inputLine => CalculateFeulForModule(int.Parse(inputLine)))
+                                    .Sum();
             return totalMass;
         }
 
         public static int Day2Solution(List<string> inputLines)
         {
-            var totalMass = 0;
-            foreach (var bla in inputLines)
-            {
-                totalMass += CalculatoreTotalFuelForModule(int.Parse(bla));
-            }
-
+            var totalMass = inputLines.Select(inputLine => CalculatoreTotalFuelForModule(int.Parse(inputLine)))
+                                        .Sum();
             return totalMass;
         }
 
@@ -57,8 +50,7 @@ namespace Day1
 
         private static int CalculateFeulForModule(int mass)
         {
-            var fuel = mass / 3;
-            return fuel - 2;
+            return (mass / 3) - 2;
         }
     }
 }
