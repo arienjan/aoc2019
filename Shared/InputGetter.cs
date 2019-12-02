@@ -19,6 +19,8 @@ namespace Shared
         public static async Task<string> ReadInputAsString(int jaar, int dag) {
             var input = await httpClient.GetAsync($"http://adventofcode.com/{jaar}/day/{dag}/input");
             var bla = await input.Content.ReadAsStringAsync();
+            bla = bla.Replace("\r", "");
+            bla = bla.Replace("\n", "");
             return bla;
         }
         
