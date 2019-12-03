@@ -33,6 +33,7 @@ namespace Day3
             var intersections = new List<Point>();
             var intersectionStepsCount = new List<int>();
 
+            // dit kan nog wel met intersect, maar niet meer want je moest per se die stepstaken erin zetten
             foreach (var point1 in wire1Points)
             {
                 foreach (var point2 in wire2Points)
@@ -60,47 +61,37 @@ namespace Day3
                 var direction = instruction.Substring(0, 1);
                 var distance = int.Parse(instruction.Substring(1));
 
-                switch (direction)
+                for (int i = 1; i < distance + 1; i++)
                 {
-                    case "U":
-                        for (int i = 1; i < distance + 1; i++) {
+                    stepsTaken++;
+                    switch (direction)
+                    {
+                        case "U":
                             currentY += 1;
-                            stepsTaken += 1;
                             wirePoints.Add(new Point(currentX, currentY, stepsTaken));
-                        }
-                        break;
-                    case "D":
-                        
-                        for (int i = 1; i < distance + 1; i++) {
+                            break;
+                        case "D":
                             currentY -= 1;
-                            stepsTaken += 1;
                             wirePoints.Add(new Point(currentX, currentY, stepsTaken));
-                        }
-                        break;
-                    case "L":
-                        
-                        for (int i = 1; i < distance + 1; i++) {
+                            break;
+                        case "L":
                             currentX -= 1;
-                            stepsTaken += 1;
                             wirePoints.Add(new Point(currentX, currentY, stepsTaken));
-                        }
-                        break;
-                    case "R":
-                        
-                        for (int i = 1; i < distance + 1; i++) {
+                            break;
+                        case "R":
                             currentX += 1;
-                            stepsTaken += 1;
                             wirePoints.Add(new Point(currentX, currentY, stepsTaken));
-                        }
-                        break;
-                    default:
-                        Console.WriteLine("Faulty Instruction");
-                        break;
+                            break;
+                        default:
+                            Console.WriteLine("Faulty Instruction");
+                            break;
+                    }
                 }
             }
         }
 
-        public static void AddPointsForDistance(ref List<Point> wirePoints, ref int currentX, ref int currentY, int distance, int direction) {
+        public static void AddPointsForDistance(ref List<Point> wirePoints, ref int currentX, ref int currentY, int distance, int direction)
+        {
             System.Console.WriteLine("nog ff ipmlementeren");
         }
 
@@ -109,7 +100,7 @@ namespace Day3
             public int X { get; set; }
             public int Y { get; set; }
 
-            public int StepsTaken {get; set;}
+            public int StepsTaken { get; set; }
 
             public Point(int x, int y, int stepsTaken)
             {
