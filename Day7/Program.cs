@@ -108,14 +108,13 @@ namespace Day7
 
             while (!isHalted) {
                 System.Console.WriteLine(iter % 5);
-                var phase = phases[iter % 5];
                 if (iter % 5 != 4) {
                     System.Console.WriteLine("HOI");
-                    thrusterSignal = Day5SolutionHacked(inputAmps[iter], thrusterSignal, ref dummyBool, phase);
+                    thrusterSignal = Day5SolutionHacked(inputAmps[iter], thrusterSignal, ref dummyBool);
                     System.Console.WriteLine("UM");
                 } else if (iter % 5 == 4) {
                     System.Console.WriteLine("HO2");
-                    thrusterSignal = Day5SolutionHacked(inputAmps[iter], thrusterSignal, ref isHalted, phase);
+                    thrusterSignal = Day5SolutionHacked(inputAmps[iter], thrusterSignal, ref isHalted);
                 }
                 System.Console.WriteLine(thrusterSignal);
                 iter++;
