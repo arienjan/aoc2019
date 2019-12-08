@@ -24,7 +24,8 @@ namespace Day7
             System.Console.WriteLine(part2Solution);
         }
 
-        public static int Part1Solution(List<int> input) {
+        public static int Part1Solution(List<int> input)
+        {
             // Generate possible phases
             var allPhases = new List<List<int>>();
 
@@ -34,12 +35,13 @@ namespace Day7
                     for (int k = 0; k < 5; k++)
                         for (int l = 0; l < 5; l++)
                             for (int m = 0; m < 5; m++)
-                                allPhases.Add(new List<int>() { i, j, k, l, m});
+                                allPhases.Add(new List<int>() { i, j, k, l, m });
 
             var filteredphases = allPhases.Where(allPhase => allPhase.Distinct().Count() == allPhase.Count());
 
             // generate the outputs
-            var outputs = filteredphases.Select(phase => {
+            var outputs = filteredphases.Select(phase =>
+            {
                 var inputProgram = input.Select(inp => inp).ToList();
                 return GetThrusterSignal(inputProgram, phase);
             });
@@ -48,7 +50,8 @@ namespace Day7
             return outputs.Max();
         }
 
-        public static int Part2Solution(List<int> input) {
+        public static int Part2Solution(List<int> input)
+        {
             // Generate possible phases
             // var allPhases = new List<List<int>>();
 
@@ -70,7 +73,7 @@ namespace Day7
             //     return GetThrusterSignal(inputProgram, phase);
             // });
 
-            var faasjes = new List<int>() { 9, 8, 7, 6, 5};
+            var faasjes = new List<int>() { 9, 8, 7, 6, 5 };
             var bla = GetThrusterSignalFromLoop(input, faasjes);
 
             // input
@@ -78,18 +81,21 @@ namespace Day7
             return bla;
         }
 
-        public static int GetThrusterSignal(List<int> input, List<int> phases) {
+        public static int GetThrusterSignal(List<int> input, List<int> phases)
+        {
             // input
             var thrusterSignal = 0;
             var isHalted = false;
 
-            foreach (var phase in phases) {
+            foreach (var phase in phases)
+            {
                 thrusterSignal = Day5SolutionHacked(input, thrusterSignal, ref isHalted, phase);
             }
             return thrusterSignal;
         }
 
-        public static int GetThrusterSignalFromLoop(List<int> input, List<int> phases) {
+        public static int GetThrusterSignalFromLoop(List<int> input, List<int> phases)
+        {
             // input
             var thrusterSignal = 0;
             var isHalted = false;
@@ -98,25 +104,32 @@ namespace Day7
 
             var inputAmps = new List<List<int>>();
 
-            // initialize the amps, ze moeten allemaal een keer de phase erdoorheen hebben
             for(int i = 0; i < 5; i++) {
                 inputAmps.Add(input.Select(ding => ding).ToList());
-                Day5SolutionHacked(inputAmps[i], 0, ref dummyBool, phases[i]);
             }
 
             // verwerk de phases voor elk:
 
-            while (!isHalted) {
-                System.Console.WriteLine(iter % 5);
-                if (iter % 5 != 4) {
-                    System.Console.WriteLine("HOI");
-                    thrusterSignal = Day5SolutionHacked(inputAmps[iter], thrusterSignal, ref dummyBool);
-                    System.Console.WriteLine("UM");
-                } else if (iter % 5 == 4) {
-                    System.Console.WriteLine("HO2");
-                    thrusterSignal = Day5SolutionHacked(inputAmps[iter], thrusterSignal, ref isHalted);
-                }
+            while (!isHalted)
+            {
+                System.Console.WriteLine(iter);
                 System.Console.WriteLine(thrusterSignal);
+                if (iter == 0 || iter == 1 || iter == 2 || iter == 3 || iter == 4)
+                {
+                    thrusterSignal = Day5SolutionHacked(inputAmps[iter], thrusterSignal, ref isHalted, phases[iter]);
+                    System.Console.WriteLine("gefaseerd");
+                }
+                else if (iter % 5 != 4 && iter > 4)
+                {
+                    System.Console.WriteLine("HOI");
+                    thrusterSignal = Day5SolutionHacked(inputAmps[iter % 5], thrusterSignal, ref dummyBool);
+                    System.Console.WriteLine("UM");
+                }
+                else if (iter % 5 == 4)
+                {
+                    System.Console.WriteLine("HO2");
+                    thrusterSignal = Day5SolutionHacked(inputAmps[iter % 5], thrusterSignal, ref isHalted);
+                }
                 iter++;
             }
             return thrusterSignal;
@@ -131,11 +144,16 @@ namespace Day7
             var inputValue = initialInput;
             var maxLength = input.Count();
 
-            if (phaseInput != -1) {
+            if (phaseInput != -1)
+            {
                 var positie = instructions[iter + 1];
                 instructions[positie] = phaseInput;
                 iter = 2;
             }
+
+            // for (int i= 0; i<input.Count(); i++) {
+            //     System.Console.WriteLine("index: {0}, value: {1}", i, input[i]);
+            // }
 
             while (iter < maxLength && keepLooping)
             {
@@ -146,8 +164,8 @@ namespace Day7
                 var opcode = input[iter];
                 int position1 = 0;
 
-                
-                System.Console.WriteLine("loop vast opcode: {0}, iter: {1}", opcode, iter);
+
+                // System.Console.WriteLine("loop vast opcode: {0}, iter: {1}", opcode, iter);
                 // System.Console.WriteLine("opcode {0}", opcode);
                 switch (opcode)
                 {
@@ -243,6 +261,8 @@ namespace Day7
                                 if (instructions[position1] != 0)
                                 {
                                     iter = opMode2 == '0' ? instructions[instructions[iter + 2]] : instructions[iter + 2];
+                                    // System.Console.WriteLine(iter);
+                                    // iter = instructions[iter + 2];
                                 }
                                 else
                                 {
@@ -286,7 +306,7 @@ namespace Day7
         {
             var value1 = opModeP1 == '0' ? instructions[instructions[iter + 1]] : instructions[iter + 1];
             var value2 = opModeP2 == '0' ? instructions[instructions[iter + 2]] : instructions[iter + 2];
-            var position3 = opModeP3 == '0' ? instructions[iter + 3] : iter+3;
+            var position3 = opModeP3 == '0' ? instructions[iter + 3] : iter + 3;
             instructions[position3] = value1 + value2;
         }
 
@@ -294,7 +314,7 @@ namespace Day7
         {
             var value1 = opModeP1 == '0' ? instructions[instructions[iter + 1]] : instructions[iter + 1];
             var value2 = opModeP2 == '0' ? instructions[instructions[iter + 2]] : instructions[iter + 2];
-            var position3 = opModeP3 == '0' ? instructions[iter + 3] : iter+3;
+            var position3 = opModeP3 == '0' ? instructions[iter + 3] : iter + 3;
             instructions[position3] = value1 * value2;
         }
 
