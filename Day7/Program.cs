@@ -100,6 +100,7 @@ namespace Day7
             var thrusterSignal = 0;
             var isHalted = false;
             var dummyBool = false;
+            // deze zou dan niet op 0 weer moeten misschien, maar blijven op waar die was
             var iter = 0;
 
             var inputAmps = new List<List<int>>();
@@ -113,54 +114,54 @@ namespace Day7
             // verwerk de phases voor elk:
 
             // poging 1
-            while (!isHalted)
-            {
-                dummyBool = false;
-                System.Console.WriteLine(iter % 5);
-                System.Console.WriteLine(thrusterSignal);
-                if (iter == 0 || iter == 1 || iter == 2 || iter == 3 || iter == 4)
-                {
-                    thrusterSignal = Day5SolutionHacked(inputAmps[iter % 5], thrusterSignal, ref dummyBool);
-                    System.Console.WriteLine("gefaseerd");
-                }
-                else if (iter % 5 != 4 && iter > 4)
-                {
-                    System.Console.WriteLine("HOI");
-                    thrusterSignal = Day5SolutionHacked(inputAmps[iter % 5], thrusterSignal, ref dummyBool);
-                    System.Console.WriteLine("UM");
-                }
-                else if (iter % 5 == 4)
-                {
-                    System.Console.WriteLine("HO2");
-                    thrusterSignal = Day5SolutionHacked(inputAmps[iter % 5], thrusterSignal, ref isHalted);
-                }
-                iter++;
-            }
-
-            // poging 2
             // while (!isHalted)
             // {
-            //     var dummyBool2 = false;
-            //     System.Console.WriteLine(iter % 5);
-            //     System.Console.WriteLine(thrusterSignal);
+            //     dummyBool = false;
+            //     // System.Console.WriteLine(iter % 5);
+            //     // System.Console.WriteLine(thrusterSignal);
             //     if (iter == 0 || iter == 1 || iter == 2 || iter == 3 || iter == 4)
             //     {
-            //         thrusterSignal = Day5SolutionHacked(input, thrusterSignal, ref dummyBool2);
+            //         thrusterSignal = Day5SolutionHacked(inputAmps[iter % 5], thrusterSignal, ref dummyBool, phases[iter]);
             //         System.Console.WriteLine("gefaseerd");
             //     }
             //     else if (iter % 5 != 4 && iter > 4)
             //     {
-            //         System.Console.WriteLine("HOI");
-            //         thrusterSignal = Day5SolutionHacked(input, thrusterSignal, ref dummyBool2);
-            //         System.Console.WriteLine("UM");
+            //         // System.Console.WriteLine("HOI");
+            //         thrusterSignal = Day5SolutionHacked(inputAmps[iter % 5], thrusterSignal, ref dummyBool);
+            //         // System.Console.WriteLine("UM");
             //     }
             //     else if (iter % 5 == 4)
             //     {
-            //         System.Console.WriteLine("HO2");
-            //         thrusterSignal = Day5SolutionHacked(input, thrusterSignal, ref isHalted);
+            //         // System.Console.WriteLine("HO2");
+            //         thrusterSignal = Day5SolutionHacked(inputAmps[iter % 5], thrusterSignal, ref isHalted);
             //     }
             //     iter++;
             // }
+
+            // poging 2
+            while (!isHalted)
+            {
+                var dummyBool2 = false;
+                // System.Console.WriteLine(iter % 5);
+                // System.Console.WriteLine(thrusterSignal);
+                if (iter == 0 || iter == 1 || iter == 2 || iter == 3 || iter == 4)
+                {
+                    thrusterSignal = Day5SolutionHacked(input, thrusterSignal, ref dummyBool2, phases[iter]);
+                    // System.Console.WriteLine("gefaseerd");
+                }
+                else if (iter % 5 != 4 && iter > 4)
+                {
+                    // System.Console.WriteLine("HOI");
+                    thrusterSignal = Day5SolutionHacked(input, thrusterSignal, ref dummyBool2);
+                    // System.Console.WriteLine("UM");
+                }
+                else if (iter % 5 == 4)
+                {
+                    // System.Console.WriteLine("HO2");
+                    thrusterSignal = Day5SolutionHacked(input, thrusterSignal, ref isHalted);
+                }
+                iter++;
+            }
             return thrusterSignal;
         }
 
@@ -198,7 +199,7 @@ namespace Day7
                 int position1 = 0;
 
 
-                System.Console.WriteLine("loop vast opcode: {0}, iter: {1}", opcode, iter);
+                // System.Console.WriteLine("loop vast opcode: {0}, iter: {1}", opcode, iter);
                 // System.Console.WriteLine("opcode {0}", opcode);
                 switch (opcode)
                 {
@@ -219,6 +220,8 @@ namespace Day7
                         position1 = instructions[iter + 1];
                         inputValue = instructions[position1];
                         iter += 2;
+                        // experimenteel:
+                        keepLooping = false;
                         break;
                     case 5:
                         System.Console.WriteLine("CASE 5");
@@ -253,6 +256,7 @@ namespace Day7
                         iter += 4;
                         break;
                     case 99:
+                    System.Console.WriteLine("WE ZIJN BIJ 99");
                         keepLooping = false;
                         isHalted = true;
                         break;
@@ -286,6 +290,8 @@ namespace Day7
                                 position1 = opMode1 == '0' ? instructions[iter + 1] : iter + 1;
                                 inputValue = instructions[position1];
                                 iter += 2;
+                                // experimenteel:
+                                keepLooping = false;
                                 break;
                             case '5':
                                 // for (int i= 0; i<input.Count(); i++) {
