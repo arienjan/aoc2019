@@ -53,9 +53,9 @@ namespace Day7
         public static int Part2Solution(List<int> input)
         {
             // Generate possible phases
-            // var allPhases = new List<List<int>>();
+            var allPhases = new List<List<int>>();
 
-            // er is vast een slimmere manier om de permutaties te genereren
+            //er is vast een slimmere manier om de permutaties te genereren
             // var start = 5;
             // var end = 10;
             // for (int i = start; i < end; i++)
@@ -67,10 +67,10 @@ namespace Day7
 
             // var filteredphases = allPhases.Where(allPhase => allPhase.Distinct().Count() == allPhase.Count());
 
-            // generate the outputs
+            // // generate the outputs
             // var outputs = filteredphases.Select(phase => {
             //     var inputProgram = input.Select(inp => inp).ToList();
-            //     return GetThrusterSignal(inputProgram, phase);
+            //     return GetThrusterSignalFromLoop(inputProgram, phase);
             // });
 
             var faasjes = new List<int>() { 9, 8, 7, 6, 5 };
@@ -104,31 +104,58 @@ namespace Day7
 
             var inputAmps = new List<List<int>>();
 
-            for(int i = 0; i < 5; i++) {
+            for (int i = 0; i < 5; i++)
+            {
                 inputAmps.Add(input.Select(ding => ding).ToList());
+                Day5SolutionHacked(inputAmps[i], thrusterSignal, ref dummyBool, phases[i]);
             }
 
             // verwerk de phases voor elk:
 
+            // poging 1
+            // while (!isHalted)
+            // {
+            //     System.Console.WriteLine(iter % 5);
+            //     System.Console.WriteLine(thrusterSignal);
+            //     if (iter == 0 || iter == 1 || iter == 2 || iter == 3 || iter == 4)
+            //     {
+            //         thrusterSignal = Day5SolutionHacked(inputAmps[iter % 5], thrusterSignal, ref dummyBool);
+            //         System.Console.WriteLine("gefaseerd");
+            //     }
+            //     else if (iter % 5 != 4 && iter > 4)
+            //     {
+            //         System.Console.WriteLine("HOI");
+            //         thrusterSignal = Day5SolutionHacked(inputAmps[iter % 5], thrusterSignal, ref dummyBool);
+            //         System.Console.WriteLine("UM");
+            //     }
+            //     else if (iter % 5 == 4)
+            //     {
+            //         System.Console.WriteLine("HO2");
+            //         thrusterSignal = Day5SolutionHacked(inputAmps[iter % 5], thrusterSignal, ref isHalted);
+            //     }
+            //     iter++;
+            // }
+
+            // poging 2
             while (!isHalted)
             {
-                System.Console.WriteLine(iter);
+                System.Console.WriteLine(iter % 5);
                 System.Console.WriteLine(thrusterSignal);
                 if (iter == 0 || iter == 1 || iter == 2 || iter == 3 || iter == 4)
                 {
-                    thrusterSignal = Day5SolutionHacked(inputAmps[iter], thrusterSignal, ref isHalted, phases[iter]);
+                    thrusterSignal = Day5SolutionHacked(input, thrusterSignal, ref dummyBool);
                     System.Console.WriteLine("gefaseerd");
                 }
                 else if (iter % 5 != 4 && iter > 4)
                 {
                     System.Console.WriteLine("HOI");
-                    thrusterSignal = Day5SolutionHacked(inputAmps[iter % 5], thrusterSignal, ref dummyBool);
+                    thrusterSignal = Day5SolutionHacked(input, thrusterSignal, ref dummyBool);
                     System.Console.WriteLine("UM");
                 }
                 else if (iter % 5 == 4)
                 {
                     System.Console.WriteLine("HO2");
-                    thrusterSignal = Day5SolutionHacked(inputAmps[iter % 5], thrusterSignal, ref isHalted);
+                    thrusterSignal = Day5SolutionHacked(input, thrusterSignal, ref isHalted);
                 }
                 iter++;
             }
@@ -149,7 +176,11 @@ namespace Day7
                 var positie = instructions[iter + 1];
                 instructions[positie] = phaseInput;
                 iter = 2;
+            } else {
+                iter = 2;
             }
+
+            //werkt dit wel, als je nei tphaseInputinvult
 
             // for (int i= 0; i<input.Count(); i++) {
             //     System.Console.WriteLine("index: {0}, value: {1}", i, input[i]);
@@ -165,7 +196,7 @@ namespace Day7
                 int position1 = 0;
 
 
-                // System.Console.WriteLine("loop vast opcode: {0}, iter: {1}", opcode, iter);
+                System.Console.WriteLine("loop vast opcode: {0}, iter: {1}", opcode, iter);
                 // System.Console.WriteLine("opcode {0}", opcode);
                 switch (opcode)
                 {
@@ -199,7 +230,7 @@ namespace Day7
                         }
                         break;
                     case 6:
-                        System.Console.WriteLine("CASE 5");
+                        System.Console.WriteLine("CASE 6");
                         if (instructions[instructions[iter + 1]] == 0)
                         {
                             iter = instructions[iter + 2];
@@ -210,12 +241,12 @@ namespace Day7
                         }
                         break;
                     case 7:
-                        System.Console.WriteLine("CASE 5");
+                        System.Console.WriteLine("CASE 7");
                         CalcOpcode7(instructions, iter);
                         iter += 4;
                         break;
                     case 8:
-                        System.Console.WriteLine("CASE 5");
+                        System.Console.WriteLine("CASE 8");
                         CalcOpcode8(instructions, iter);
                         iter += 4;
                         break;
@@ -255,6 +286,9 @@ namespace Day7
                                 iter += 2;
                                 break;
                             case '5':
+                                // for (int i= 0; i<input.Count(); i++) {
+                                //     System.Console.WriteLine("index: {0}, value: {1}", i, input[i]);
+                                // }
                                 position1 = opMode1 == '0' ? instructions[iter + 1] : iter + 1;
                                 // position1 = instructions[iter + 1];
                                 // position1 = iter + 1;
@@ -291,6 +325,7 @@ namespace Day7
                                 break;
                             default:
                                 System.Console.WriteLine("KAPOT");
+                                // isHalted = true;
                                 break;
 
                         }
