@@ -13,7 +13,7 @@ public struct Vector2D : IEquatable<Vector2D>, IComparable<Vector2D>
         get
         {
             // dit word wel iffy, HEEL iffy
-            return Math.Atan2(X, Y) + Math.PI/2;
+            return -1 * Math.Atan2(X, Y);
         }
     }
 
