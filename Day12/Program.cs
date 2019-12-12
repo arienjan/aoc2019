@@ -15,30 +15,25 @@ namespace Day12
             jupiterMoonSystem.AddMoon(new Moon(-4, -1, 19));
             jupiterMoonSystem.AddMoon(new Moon(-15, -14, 12));
             jupiterMoonSystem.AddMoon(new Moon(-17, 1, 10));
-            
+
             var solution = Part1Solution(jupiterMoonSystem, 1000);
             System.Console.WriteLine(solution);
 
             // Part 2
             jupiterMoonSystem = new JupiterMoonSystem();
-            jupiterMoonSystem.AddMoon(new Moon(-1, 0, 2));
-            jupiterMoonSystem.AddMoon(new Moon(2, -10, -7));
-            jupiterMoonSystem.AddMoon(new Moon(4, -8, 8));
-            jupiterMoonSystem.AddMoon(new Moon(3, 5, -1));
+            jupiterMoonSystem.AddMoon(new Moon(1, 4, 4));
+            jupiterMoonSystem.AddMoon(new Moon(-4, -1, 19));
+            jupiterMoonSystem.AddMoon(new Moon(-15, -14, 12));
+            jupiterMoonSystem.AddMoon(new Moon(-17, 1, 10));
 
             var jupiterMoonSystemInitial = new JupiterMoonSystem();
-            // jupiterMoonSystemInitial.AddMoon(new Moon(1, 4, 4));
-            // jupiterMoonSystemInitial.AddMoon(new Moon(-4, -1, 19));
-            // jupiterMoonSystemInitial.AddMoon(new Moon(-15, -14, 12));
-            // jupiterMoonSystemInitial.AddMoon(new Moon(-17, 1, 10));
-            
-            jupiterMoonSystemInitial.AddMoon(new Moon(-1, 0, 2));
-            jupiterMoonSystemInitial.AddMoon(new Moon(2, -10, -7));
-            jupiterMoonSystemInitial.AddMoon(new Moon(4, -8, 8));
-            jupiterMoonSystemInitial.AddMoon(new Moon(3, 5, -1));
+            jupiterMoonSystemInitial.AddMoon(new Moon(1, 4, 4));
+            jupiterMoonSystemInitial.AddMoon(new Moon(-4, -1, 19));
+            jupiterMoonSystemInitial.AddMoon(new Moon(-15, -14, 12));
+            jupiterMoonSystemInitial.AddMoon(new Moon(-17, 1, 10));
 
             var solution2 = Part2Solution(jupiterMoonSystem, jupiterMoonSystemInitial);
-            System.Console.WriteLine(solution);
+            System.Console.WriteLine(solution2);
         }
 
         public static int Part1Solution(JupiterMoonSystem jupiterMoonSystem, int steps)
@@ -65,11 +60,13 @@ namespace Day12
             return jupiterMoonSystem.getTotalEnergy();
         }
 
+        // theoretisch gezien werkt het....
         public static int Part2Solution(JupiterMoonSystem jupiterMoonSystem, JupiterMoonSystem initialSystem)
         {
             var steps = 0;
-            var initialMoonSet = new HashSet<Moon>(initialSystem.Moons);
             var historyDoesntRepeat = true;
+            var moonEqualityComparer = new MoonEqualityComparer();
+            var velocityEqualityComparer = new VelocityEqualityComparer();
             while (historyDoesntRepeat)
             {
                 steps++;
@@ -89,8 +86,8 @@ namespace Day12
                     moon.Tick();
                 }
 
-                if (!initialSystem.Moons.Except(jupiterMoonSystem.Moons).Any() 
-                    && !initialSystem.MoonVelocities.Except(jupiterMoonSystem.MoonVelocities).Any())
+                if (!initialSystem.Moons.Except(jupiterMoonSystem.Moons, moonEqualityComparer).Any()
+                    && !initialSystem.MoonVelocities.Except(jupiterMoonSystem.MoonVelocities, velocityEqualityComparer).Any())
                 {
                     historyDoesntRepeat = false;
                 }
@@ -100,7 +97,51 @@ namespace Day12
         }
     }
 
-    public class Moon : IEqualityComparer<Moon>
+    class MoonEqualityComparer : IEqualityComparer<Moon>
+    {
+        public bool Equals(Moon b1, Moon b2)
+        {
+            if (b2 == null && b1 == null)
+                return true;
+            else if (b1 == null || b2 == null)
+                return false;
+            else if (b1.X == b2.X && b1.Y == b2.Y
+                                && b1.Z == b2.Z)
+                return true;
+            else
+                return false;
+        }
+
+        public int GetHashCode(Moon bx)
+        {
+            int hCode = bx.X ^ bx.Y ^ bx.Z;
+            return hCode.GetHashCode();
+        }
+    }
+
+    class VelocityEqualityComparer : IEqualityComparer<Velocity>
+    {
+        public bool Equals(Velocity b1, Velocity b2)
+        {
+            if (b2 == null && b1 == null)
+                return true;
+            else if (b1 == null || b2 == null)
+                return false;
+            else if (b1.vX == b2.vX && b1.vY == b2.vY
+                                && b1.vZ == b2.vZ)
+                return true;
+            else
+                return false;
+        }
+
+        public int GetHashCode(Velocity bx)
+        {
+            int hCode = bx.vX ^ bx.vY ^ bx.vZ;
+            return hCode.GetHashCode();
+        }
+    }
+
+    public class Moon
     {
         public int X { get; set; }
         public int Y { get; set; }
@@ -133,16 +174,6 @@ namespace Day12
             var ePot = Math.Abs(X) + Math.Abs(Y) + Math.Abs(Z);
             var eKin = Math.Abs(V.vX) + Math.Abs(V.vY) + Math.Abs(V.vZ);
             return ePot * eKin;
-        }
-
-        public bool Equals(Moon x, Moon y)
-        {
-            return x.X == y.X && x.Y == y.Y && x.Z == y.Z;
-        }
-
-        public int GetHashCode(Moon obj)
-        {
-            return obj.GetHashCode();
         }
     }
 
