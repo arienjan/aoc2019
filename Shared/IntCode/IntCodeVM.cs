@@ -13,10 +13,8 @@ public class IntCodeVM {
     }
 
     public void Run(int inputValue) {
-        iter = 0;
     }
 
     public void Run(int inputValue, int phase) {
-        iter = 0;
     }
 }
