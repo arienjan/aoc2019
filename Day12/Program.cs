@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Day12
 {
@@ -61,9 +62,9 @@ namespace Day12
         }
 
         // theoretisch gezien werkt het....
-        public static int Part2Solution(JupiterMoonSystem jupiterMoonSystem, JupiterMoonSystem initialSystem)
+        public static long Part2Solution(JupiterMoonSystem jupiterMoonSystem, JupiterMoonSystem initialSystem)
         {
-            var steps = 0;
+            long steps = 0;
             var historyDoesntRepeat = true;
             var moonEqualityComparer = new MoonEqualityComparer();
             var velocityEqualityComparer = new VelocityEqualityComparer();
@@ -72,7 +73,7 @@ namespace Day12
                 steps++;
                 foreach (var moon in jupiterMoonSystem.GetMoons())
                 {
-                    var otherMoons = jupiterMoonSystem.Moons.Where(m => m != moon);
+                    var otherMoons = jupiterMoonSystem.Moons.Where(m => m != moon); //hier kun je ook excepten als sneller;
                     foreach (var otherMoon in otherMoons)
                     {
                         moon.V.vX += (otherMoon.X - moon.X) == 0 ? (otherMoon.X - moon.X) : (otherMoon.X - moon.X) / Math.Abs(otherMoon.X - moon.X);
